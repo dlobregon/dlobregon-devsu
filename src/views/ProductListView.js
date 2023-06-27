@@ -1,5 +1,6 @@
 import { getProducts } from '../services/Api.js'
 import { useEffect, useState } from 'react'
+import ProductList from '../components/ProductList/ProductList.js'
 
 const ProductListView = () => {
 
@@ -8,7 +9,6 @@ const ProductListView = () => {
     const getProductList = async () => {
         try {
             const productListData = await getProducts()
-            console.log(productListData)
             setProductList(productListData)
         }
         catch (err) {
@@ -18,11 +18,13 @@ const ProductListView = () => {
 
     useEffect(() => {
         getProductList()
-
     }, [])
 
     return (
-        <h1>Hola</h1>
+        <> 
+            <h1>Lista de productos</h1>
+            <ProductList products={productList} />
+        </>
     )
 
 }

@@ -1,0 +1,28 @@
+.product-list-container {
+  width: 100%;
+}
+
+.product-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.product-table th {
+  width: 30px;
+}
+
+.product-table img {
+  width: 100%;
+  height: auto;
+  clip-path: circle();
+}
+
+.product-table td, .product-table th {
+  padding: 10px;
+  border-bottom: 1px solid #ABB2B9 ;
+}
+
+.product-table thead {
+  background-color: #D5D8DC ;
+}
