@@ -2,7 +2,7 @@ import {useState, useEffect} from 'react'
 import bancoLogo from '../../assets/MainPichincha.svg'
 
 
-const ProductForm = ({ currentProduct, isNew }) => {
+const ProductForm = ({ currentProduct, isNew, saveProduct, editProduct }) => {
 
 
     const[product, setProduct] = useState(currentProduct)
@@ -10,6 +10,7 @@ const ProductForm = ({ currentProduct, isNew }) => {
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         if(name==='date_release') {
+            console.log(value)
            const current_date = new Date(value)
            const updatedDate = new Date(current_date.getFullYear() + 1, current_date.getMonth(), current_date.getDate());
            const newReleaseDate = updatedDate.toISOString().substr(0, 10)
@@ -36,9 +37,9 @@ const ProductForm = ({ currentProduct, isNew }) => {
     
     const handleSave  = () => {
         if(isNew) {
-            console.log('guardando')
+            saveProduct(product)
         } else {
-            console.log('editando')
+            editProduct(product)
         }
     }
 

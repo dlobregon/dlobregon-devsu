@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useParams } from 'react-router-dom';
 import ProductForm from "../components/ProductForm/ProductForm"
-import { validateProduct } from "../services/Api"
+import { validateProduct, saveProduct, editProduct } from "../services/Api"
 
 
 const ProductFormView = () => {
@@ -20,8 +20,9 @@ const ProductFormView = () => {
     const validateProductId = async (productId) => {
         try {
             const info = await validateProduct(productId)
-            setCurrentProduct({...info[0], date_release: new Date(info[0].date_release).toISOString().substr(0, 10),
-            date_revision:new Date(info[0].date_revision).toISOString().substr(0, 10) })
+            const foundvalue  =  info.find(element =>element.id === productId)
+            setCurrentProduct({...foundvalue, date_release: new Date(foundvalue.date_release).toISOString().substr(0, 10),
+            date_revision:new Date(foundvalue.date_revision).toISOString().substr(0, 10) })
         }
         catch(err) {
             console.log(err)
@@ -34,7 +35,31 @@ const ProductFormView = () => {
         }
     }, [productId])
 
-    return (<ProductForm currentProduct={currentProduct} isNew={productId? false: true}/>)
+
+    const saveNewProduct = async(product) => {
+        try {
+            const info = await saveProduct(product)
+            console.log(info)
+        }
+        catch(err) {
+            console.log(err)
+        }
+    }
+
+
+    const editCurrentProduct = async (product)=>{
+        try {
+            const info = await editProduct(product)
+            console.log(info)
+        }
+        catch(err) {
+            console.log(err)
+        }
+    }
+
+
+
+    return (<ProductForm currentProduct={currentProduct} isNew={productId? false: true} saveProduct={saveNewProduct} editProduct={editCurrentProduct}/>)
 }
 
 export default ProductFormView

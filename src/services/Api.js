@@ -42,5 +42,41 @@ export const validateProduct = async (productId)=>{
 }
 
 export const saveProduct = async(product) => {
-    
+    try {
+        const response = await fetch(API_URL, {
+            headers: {...headerSetup.headers, 'Content-Type': 'application/json'}, 
+            method: 'POST', 
+            body: JSON.stringify(product) 
+        })
+        if (response.status === 200) {
+            const result = await response.json()
+            return result
+        } else {
+            throw new Error('Failed to save Product')
+        }
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+
+export const editProduct = async (product)=>{
+    const editURL = `${API_URL}?id=${product.id}`
+    try {
+        const response = await fetch(editURL, {
+            headers: {...headerSetup.headers, 'Content-Type': 'application/json'}, 
+            method: 'PUT', 
+            body: JSON.stringify(product) 
+        })
+        if (response.status === 200) {
+            const productInfo = await response.json()
+            return productInfo
+        } else {
+            throw new Error(`Failed to get product ${product.id}`)
+        }
+    }
+    catch (err) {
+        throw err
+    }
 }

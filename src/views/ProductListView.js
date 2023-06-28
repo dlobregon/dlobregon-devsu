@@ -57,7 +57,6 @@ const ProductListView = () => {
         if(option===1) {
             console.log('delete', productId)
         } else {
-            console.log('edit', productId)
             navigate(`edit/${productId}`)
         }
     }
