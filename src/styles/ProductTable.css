@@ -1,0 +1,61 @@
+.product-table {
+    border-collapse: collapse;
+    width: 100%;
+    text-align: left;
+}
+
+.product-table thead th {
+    background-color: #F2F4F4; 
+    position: sticky;
+    top: 0; 
+    z-index: 1; 
+    height: 60px;
+}
+
+th,
+.product-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #F2F4F4; 
+}
+
+
+.product-table img {
+    width: 100%;
+    height: 40px;
+    clip-path: circle();
+  }
+
+.product-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ABB2B9 ;  
+}
+
+.product-table tbody tr {
+    height: 60px;
+}
+
+.three-dot::after {
+    content: '\2807';
+  font-size: 20px;
+}
+
+/** used for the context menu*/
+.menu-container {
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.menu-item-eliminar {
+    color:red;
+    padding: 5px;
+    font-size: 13px;
+}
+
+.menu-item-editar {
+    padding: 5px;
+    font-size: 13px;
+}
+
+.menu-item-editar:hover, .menu-item-eliminar:hover {
+    background-color:  #F2F4F4;
+}
