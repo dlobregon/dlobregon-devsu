@@ -4,6 +4,7 @@ import { getProducts } from '../services/Api.js'
 import bancoLogo from '../assets/MainPichincha.svg'
 import ProductList from '../components/ProductList/ProductList.js'
 import DropdownPagination from '../components/ProductList/DropdownPagination.js'
+import { deleteProduct } from '../services/Api.js';
 
 const ProductListView = () => {
 
@@ -36,9 +37,8 @@ const ProductListView = () => {
 
         let validKeyword = keyword!=null? keyword: keywordSearch
         let validRows = rows!=null? rows: numberOfRows
-        console.log(productList.length)
-        const newFilteredProducts = validKeyword === ''? [...productList]:productList.filter((product)=> product.name.includes(validKeyword))
-        console.log('1',validKeyword,validRows, newFilteredProducts.length)
+        const newFilteredProducts = validKeyword === ''? [...productList]:productList.filter((product)=> product.name.toLowerCase().includes(validKeyword.toLowerCase()))
+        
 
         if(validRows === 'Todos') {
             setFilteredProducts(newFilteredProducts)
@@ -55,7 +55,11 @@ const ProductListView = () => {
 
     const actionHandler = (productId, option) => {
         if(option===1) {
-            console.log('delete', productId)
+            try {
+                deleteProduct(productId)
+            } catch(err) {
+                console.log(err)
+            }
         } else {
             navigate(`edit/${productId}`)
         }

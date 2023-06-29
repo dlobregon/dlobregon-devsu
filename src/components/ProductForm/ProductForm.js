@@ -1,47 +1,107 @@
-import {useState, useEffect} from 'react'
+import { useState, useEffect } from 'react'
 import bancoLogo from '../../assets/MainPichincha.svg'
+import { oneYearAfter, isBefore } from '../../utils/Date'
 
 
 const ProductForm = ({ currentProduct, isNew, saveProduct, editProduct }) => {
 
+    const initialErrors = {
+        id: isNew,
+        name: isNew,
+        description: isNew,
+        logo: isNew,
+        'date_release': false,
+    }
 
-    const[product, setProduct] = useState(currentProduct)
+    const [product, setProduct] = useState(currentProduct)
+    const [errors, setErrors] = useState(initialErrors)
+
+    const [formError, setFormError] = useState(isNew)
+
+    const errorMessages = {
+        id: 'El tamaño del ID debe ser mínimo 3 y máximo 10 caracteres',
+        name: 'El tamaño del nombre debe ser mínimo 3 y máximo 10 caracteres',
+        description: 'El tamaño de la descripción debe ser mínimo 10 y máximo 200 caracteres',
+        logo: 'Se requiere una cadena válida',
+        'date_release': 'La fecha no puede ser menor a la fecha de hoy',
+    }
+
+
+    const checkRules = (field, content) => {
+        let newErrors = { ...errors }
+        switch (field) {
+            case 'id':
+                newErrors.id = content.length < 3 || content.length > 10
+                break
+            case 'name':
+                newErrors.name = content.length < 3 || content.length > 10
+                break
+            case 'description':
+                newErrors.description = content.length < 10 || content.length > 200
+                break
+            case 'logo':
+                let regex = new RegExp(/^(http|https):\/\/[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,})\/.+(\.(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF))$/i
+                )
+                newErrors.logo = regex.test(content) == false
+                setErrors(newErrors)
+                break
+            case 'date_release':
+                newErrors['date_release'] = isBefore(content)
+                setErrors(newErrors)
+                isBefore(content)
+                break
+        }
+        const isValid = (newErrors.id || newErrors.name || newErrors.description || newErrors.logo || newErrors['date_release'])
+        setFormError(isValid)
+        setErrors(newErrors)
+    }
+
+
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        if(name==='date_release') {
-            console.log(value)
-           const current_date = new Date(value)
-           const updatedDate = new Date(current_date.getFullYear() + 1, current_date.getMonth(), current_date.getDate());
-           const newReleaseDate = updatedDate.toISOString().substr(0, 10)
+        if (name === 'date_release') {
+            const newReleaseDate = oneYearAfter(value)
 
-        setProduct((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-            ['date_revision']:newReleaseDate,
-          }));
+            setProduct((prevFormData) => ({
+                ...prevFormData,
+                [name]: value,
+                ['date_revision']: newReleaseDate,
+            }));
+
+            checkRules(name, value)
         } else {
 
-        setProduct((prevFormData) => ({
-            ...prevFormData,
-            [name]: value,
-          }));
-        }
-      };
+            setProduct((prevFormData) => ({
+                ...prevFormData,
+                [name]: value,
+            }));
 
-    useEffect(()=>{
-        if(currentProduct) {
+            checkRules(name, value)
+        }
+    };
+
+    useEffect(() => {
+        if (currentProduct) {
             setProduct(currentProduct)
         }
     }, [currentProduct])
-    
-    const handleSave  = () => {
-        if(isNew) {
-            saveProduct(product)
+
+    const handleSave = () => {
+        const productToSave = {...product,id:product.id.trim(), description:product.description.trim()}
+        if (isNew) {
+            saveProduct(productToSave)
         } else {
-            editProduct(product)
+            editProduct(productToSave)
         }
     }
+
+    const resetValues = () => {
+        setProduct(currentProduct)
+        setErrors(initialErrors)
+        setFormError(isNew)
+    }
+
 
 
     return (
@@ -59,27 +119,32 @@ const ProductForm = ({ currentProduct, isNew, saveProduct, editProduct }) => {
                     <div className='form-row'>
                         <div className="input-wrapper">
                             <label>ID</label>
-                            <input value={product.id} onChange={handleInputChange} type="text" name="id" />
+                            <input value={product.id} disabled={!isNew} onChange={handleInputChange} type="text" name="id" style={{ border: errors['id'] ? '2px solid red' : '1px solid black' }} />
+                            <span style={{ display: errors['id'] ? 'block' : 'none' }}>{errorMessages['id']}</span>
                         </div>
                         <div className="input-wrapper">
                             <label >Nombre</label>
-                            <input value={product.name} onChange={handleInputChange} type="text" name="name" />
+                            <input value={product.name} onChange={handleInputChange} type="text" name="name" style={{ border: errors['name'] ? '2px solid red' : '1px solid black' }} />
+                            <span style={{ display: errors['name'] ? 'block' : 'none' }} >{errorMessages['name']}</span>
                         </div>
                     </div>
                     <div className='form-row'>
                         <div className="input-wrapper">
                             <label >Descripcion</label>
-                            <input value={product.description} onChange={handleInputChange} type="text" name="description" />
+                            <input value={product.description} onChange={handleInputChange} type="text" name="description" style={{ border: errors['description'] ? '2px solid red' : '1px solid black' }} />
+                            <span style={{ display: errors['description'] ? 'block' : 'none' }}>{errorMessages['description']}</span>
                         </div>
                         <div className="input-wrapper">
                             <label >Logo</label>
-                            <input value={product.logo} onChange={handleInputChange} type="text" name="logo" />
+                            <input value={product.logo} onChange={handleInputChange} type="text" name="logo" style={{ border: errors['logo'] ? '2px solid red' : '1px solid black' }} />
+                            <span style={{ display: errors['logo'] ? 'block' : 'none' }}>{errorMessages['logo']}</span>
                         </div>
                     </div>
                     <div className='form-row'>
                         <div className="input-wrapper">
-                            <label >Fecha liberacion</label> 
-                            <input value={product.date_release} onChange={handleInputChange} type="date" name="date_release" />
+                            <label >Fecha liberacion</label>
+                            <input value={product.date_release} onChange={handleInputChange} type="date" name="date_release" data-dateformat="YYYY-MM-DD" style={{ border: errors['date_release'] ? '2px solid red' : '1px solid black' }} />
+                            <span style={{ display: errors['date_release'] ? 'block' : 'none' }}>{errorMessages['date_release']}</span>
                         </div>
                         <div className="input-wrapper">
                             <label >Fecha revision</label>
@@ -89,12 +154,11 @@ const ProductForm = ({ currentProduct, isNew, saveProduct, editProduct }) => {
 
                     <div className='form-row-buttons'>
                         <div id="form-button-container-left">
-                            <button id="restart-button">Reiniciar</button>
+                            <button id="restart-button" onClick={resetValues} >Reiniciar</button>
                         </div>
                         <div id='form-button-container-right'>
-                            <button id="send-button" onClick={handleSave}>Enviar</button>
+                            <button id="send-button" onClick={handleSave} disabled={formError} >Enviar</button>
                         </div>
-
                     </div>
                 </div>
             </div>

@@ -5,7 +5,8 @@ const API_URL = 'https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azure
 
 const headerSetup = {
     headers: {
-        authorId: '1234567989'
+        'authorId': '45', 
+        'Content-Type': 'application/json'
     }
 }
 
@@ -44,7 +45,7 @@ export const validateProduct = async (productId)=>{
 export const saveProduct = async(product) => {
     try {
         const response = await fetch(API_URL, {
-            headers: {...headerSetup.headers, 'Content-Type': 'application/json'}, 
+            headers: {...headerSetup.headers}, 
             method: 'POST', 
             body: JSON.stringify(product) 
         })
@@ -65,7 +66,7 @@ export const editProduct = async (product)=>{
     const editURL = `${API_URL}?id=${product.id}`
     try {
         const response = await fetch(editURL, {
-            headers: {...headerSetup.headers, 'Content-Type': 'application/json'}, 
+            headers: {...headerSetup.headers}, 
             method: 'PUT', 
             body: JSON.stringify(product) 
         })
@@ -74,6 +75,26 @@ export const editProduct = async (product)=>{
             return productInfo
         } else {
             throw new Error(`Failed to get product ${product.id}`)
+        }
+    }
+    catch (err) {
+        throw err
+    }
+}
+
+
+export const deleteProduct = async (product) => {
+    const editURL = `${API_URL}?id=${product}`
+    try {
+        const response = await fetch(editURL, {
+            headers: {...headerSetup.headers}, 
+            method: 'DELETE',
+        })
+        if (response.status === 200) {
+            const productInfo = await response.json()
+            return productInfo
+        } else {
+            throw new Error(`Failed to delete product ${product}`)
         }
     }
     catch (err) {

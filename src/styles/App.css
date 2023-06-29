@@ -37,7 +37,6 @@
   border-radius: 4px;
   border:0;
   width: 90px;
-  /*font-family: 'Prelo',sans-serif;*/
 }
 
 .table-options button:hover {
@@ -60,10 +59,6 @@
 }
 
 .product-table-container {
-  /*width: 95%;
-  margin-left: auto;
-  margin-right: auto;
-  background-color: white;*/
   padding: 15px;
   height: 450px; 
   overflow: auto;
@@ -153,6 +148,14 @@ body,html {
   padding: 10px;
   width: 200px;
   border-radius: 4px;
+}
+
+.input-wrapper span {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+  font-size: 12px;
+  color: red;  
 }
 
 #form-button-container-left, #form-button-container-right {

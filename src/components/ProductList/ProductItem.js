@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import ContextMenu from './ContextMenu';
+import { formatDate } from '../../utils/Date';
 
 const ProductItem = ({product, setIndexForMenu, index, menuIndexVisible, actionHandler}) => {
     const [menuVisible, setMenuVisible] = useState(false);
@@ -30,8 +31,8 @@ const ProductItem = ({product, setIndexForMenu, index, menuIndexVisible, actionH
             </td>
             <td onClick={resetMenuIndex}>{product.name}</td>
             <td onClick={resetMenuIndex}>{product.description}</td>
-            <td onClick={resetMenuIndex}>{new Date(product.date_release).toISOString().substr(0, 10) }</td>
-            <td onClick={resetMenuIndex}>{new Date(product.date_revision).toISOString().substr(0, 10) }</td>
+            <td onClick={resetMenuIndex}>{ formatDate(product.date_release) }</td>
+            <td onClick={resetMenuIndex}>{ formatDate(product.date_revision) }</td>
             <td>
                 <div className="three-dot" onClick={handleClick}></div>
                 { menuIndexVisible === index &&  menuVisible && (
