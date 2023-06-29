@@ -1,6 +1,7 @@
-# Getting Started with Create React App
+# devsu coding challenges
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Imagen de la App corriendo:
+![Catalogo de productos financieros banco pichincha](src/assets/ShowInitialPage.png)
 
 ## Available Scripts
 
